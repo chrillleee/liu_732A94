@@ -2,6 +2,8 @@ library(markmyassignment)
 lab_path <-
 "https://raw.githubusercontent.com/STIMALiU/AdvRCourse/master/Labs/Tests/lab1.yml"
 set_assignment(lab_path)
+name <- "Christian Jonsson"
+liuid <- "chjon338"
 
 # Assignment set:
 # Lab1: Advanced R programming, computer lab 1
@@ -91,3 +93,25 @@ add_note <-function(x, note){
     x["note"] <- note
     return(x)
 }
+
+sum_numeric_parts <- function(x){
+  output <- 0
+  for(num in x){
+    if(is.numeric(num)){
+      output = output + sum(num)    
+    }
+  }
+  return(output)
+}
+
+my_data.frame <- function(){
+  data.frame(
+  id = c(1,2,3),
+  name = c("John","Lisa","Azra"),
+  income = c(7.30,0.00,15.21),
+  rich = c(FALSE,FALSE,TRUE)
+)
+} 
+
+
+mark_my_assignment(tasks = "my_data.frame")
