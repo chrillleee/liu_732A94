@@ -41,7 +41,9 @@ filter_my_vector <- function(x, leq){
 }
 
  dot_prod <- function(a, b){
-  return(a %*% b)
+  #return(a %*% b)
+  return(sum(a * b))
+
  }
 
  approx_e <- function(N){
@@ -85,7 +87,7 @@ return(magic_list)
 }
 
 change_info <-function(x, text){
-    x[1]<-text
+    x[["info"]]<- text
     return(x)
 }
 
@@ -113,5 +115,48 @@ my_data.frame <- function(){
 )
 } 
 
+sort_head <-function(df, var.name, n){
+  indexes <- order(df[[var.name]],decreasing = TRUE)
+  return(df[indexes[1:n],])
+}
 
-mark_my_assignment(tasks = "my_data.frame")
+add_median_variable<-function(df, j){
+  median_val<- median(df[,j])
+  output_str <- c()
+  tmp_str = ""
+  for(num in df[,j]){
+    if(num > median_val){
+      tmp_str = "Greater"
+    } else if (num < median_val) {
+      tmp_str = "Smaller"
+    }else{
+      tmp_str = "Median"
+    }
+    output_str <- append(output_str,tmp_str)
+  }
+  df <- cbind(df, compared_to_median = output_str)
+  return(df)
+}
+
+analyze_columns <-function(df, j){ 
+  matrix_eval <- df[,j]
+  theNames <- colnames(matrix_eval)
+  output <- list(
+    get_mmstd(matrix_eval[,1]),
+    get_mmstd(matrix_eval[,2]),
+    cor(matrix_eval))
+
+  names(output) <- c(theNames,"correlation_matrix")
+  return(output)
+}
+
+get_mmstd <-function(vector){
+  output <-c(
+   mean(vector),
+   median(vector),
+   sd(vector))
+  names(output) <- c("mean","median","sd")
+return(output)
+}
+
+mark_my_assignment()
