@@ -44,14 +44,14 @@ getWinAlternatives <-function(choiseIndex){
     return(winMatrix[choiseIndex,])
 }
 
-my_moving_median <-function(x,n,opt="na.rm = FALSE"){
+my_moving_median <-function(x,n,na.rm = FALSE){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(n)))
     output <- c()
      for(index in (n+1):length(x)){
         window <- x[(index-n):index]
-        print(median(window,opt))
+        output = append(output,median(window,na.rm ))
      }
-
+    return(output)
 }
 
 for_mult_table <-function(from,to){
@@ -112,7 +112,7 @@ repeat_find_cumsum <-function(x, find_sum){
     return(cumsum)
 }
 
-repeat_my_moving_median  <-function(x,n,opt="na.rm = FALSE"){
+repeat_my_moving_median<-function(x,n, na.rm = FALSE){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(n)))
     output <- c()
     index = n+1
@@ -120,9 +120,24 @@ repeat_my_moving_median  <-function(x,n,opt="na.rm = FALSE"){
      repeat{
         if(index > stopIndex){break}
         window <- x[(index-n):index]
-        output = append(output,median(window,opt))
+        output = append(output,median(window,na.rm))
         index = index + 1
      }
     return(output)
 }
- mark_my_assignment("repeat_my_moving_median")
+
+in_environment<-function(env){
+    return(ls(env))
+}
+
+cov <-function(X){
+    stopifnot(is.data.frame(X))
+    func <- (function(y) { sd(y)/mean(y) })
+    return(sapply(X, func))
+}
+
+moment <- function(i){
+    stopifnot(is.numeric(i))
+    return(function(data) {mean((data - mean(data))^i)})
+}
+mark_my_assignment()
