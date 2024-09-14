@@ -19,6 +19,9 @@ liuid <- "chjon338"
 # - cov
 # - moment
 
+
+# created a win matrix since this will be smaller than the NxN matrix if i created all alternatives.
+# If the opponents index is found in the win matrix that means the player has won. If no match is found that means it is a draw 
 sheldon_game <-function(player1, player2){
     stopifnot(is.character(player1),is.character(player2))
 
@@ -44,6 +47,10 @@ getWinAlternatives <-function(choiseIndex){
     return(winMatrix[choiseIndex,])
 }
 
+# Step 1. Obtain the correct window to be evaluated, note +1 since one-indexing in R
+# Step 2. Take mean of window
+# Step 3. Append output to get the vector
+# Step 4. Add 1 to index until hit the ceiling
 my_moving_median <-function(x,n,na.rm = FALSE){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(n)))
     output <- c()
@@ -54,6 +61,8 @@ my_moving_median <-function(x,n,na.rm = FALSE){
     return(output)
 }
 
+# Step 1: since the rows of the matrix are created by multiplying the numbers with a scalar this will be static
+# Step 2: "append" the row with rbind starting with an empty matrix
 for_mult_table <-function(from,to){
     stopifnot(is.numeric(from) && length(from)==1,is.numeric(to) && length(to)==1)
     staticRow = from:to
@@ -64,6 +73,11 @@ for_mult_table <-function(from,to){
     return(outputMatrix)
 }
 
+# We have 2 conditions that will break the loop, the value of the sum dependent on the input argument,
+# and the length of the input vector. Note the And and the "smaller than" sign.
+# Step 1 get all the inputs, and set cumsum to zero. Save stopIteration to avoid having to recalculate it every interation
+# Step 2 add value to cumulative sum
+# Step 3 increase index/iteration
 find_cumsum <-function(x,find_sum){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(find_sum)))
     
@@ -78,6 +92,10 @@ find_cumsum <-function(x,find_sum){
 
 }
 
+# Since one demand was to have a nested while i bruteforced it 
+# Step 1: Create static Row (nested while), and reset values 
+# Step 2: multiply with current "row"-value and save to output (top while)
+# Step 3: Increase step 
 while_mult_table <-function(from, to){
     stopifnot(is.numeric(from) && length(from)==1,is.numeric(to) && length(to)==1)
     outputMatrix = c()
@@ -96,6 +114,8 @@ while_mult_table <-function(from, to){
     return(outputMatrix)
 }
 
+# same as find_cumsum but move the conditions from the while to the if and negate the conditions
+# i.e. swap smaller to greater than, and change from and to or  
 repeat_find_cumsum <-function(x, find_sum){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(find_sum)))
     
@@ -112,6 +132,8 @@ repeat_find_cumsum <-function(x, find_sum){
     return(cumsum)
 }
 
+# same as my_moving_median but move the conditions from the while to the if and negate the conditions
+# had to declare the starting point to above the loop
 repeat_my_moving_median<-function(x,n, na.rm = FALSE){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(n)))
     output <- c()
@@ -126,16 +148,19 @@ repeat_my_moving_median<-function(x,n, na.rm = FALSE){
     return(output)
 }
 
+# just syntax
 in_environment<-function(env){
     return(ls(env))
 }
 
+# create the function beforehand and then use simple apply since we wanted a vector as output
 cov <-function(X){
     stopifnot(is.data.frame(X))
     func <- (function(y) { sd(y)/mean(y) })
     return(sapply(X, func))
 }
 
+# Tricky part was to understand the wikipedia. same as Above but simpler and was able to return the funcition straigt away
 moment <- function(i){
     stopifnot(is.numeric(i))
     return(function(data) {mean((data - mean(data))^i)})
