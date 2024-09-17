@@ -21,7 +21,6 @@ liuid <- "chjon338"
         
         for(neighbor in neighbors){
             neighborData <- priorityQueue[[neighbor]]
-            # print(savedData[[u]]$dist)
             alt <- savedData[[u]]$dist + getWeightFromName(u,neighbor,graph)    
             if(alt < neighborData$dist){
                 priorityQueue[[neighbor]]$dist <- alt
@@ -31,26 +30,7 @@ liuid <- "chjon338"
     }
 
     outputVector <- unname(sapply(savedData, function(x) x$dist))
-    print(outputVector)
-
-# Psedo-code: 
-#   function Dijkstra(Graph, source):
-#      for each vertex v in Graph.Vertices:
-#          dist[v] ← INFINITY
-#          prev[v] ← UNDEFINED
-#          add v to Q
-#      dist[source] ← 0
-    
-#      while Q is not empty:
-#          u ← vertex in Q with minimum dist[u]
-#          remove u from Q
-        
-#          for each neighbor v of u still in Q:
-#              alt ← dist[u] + Graph.Edges(u, v)
-#              if alt < dist[v]:
-#                  dist[v] ← alt
-#                  prev[v] ← u
-    #  return dist[], prev[]
+    return(outputVector)
 }
 
 
