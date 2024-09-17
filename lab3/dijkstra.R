@@ -10,13 +10,29 @@ liuid <- "chjon338"
     stopifnot(is.numeric(init_node))
 
     priorityQueue <- getPriorityQueue(graph,init_node)
+    savedData <- priorityQueue
 
     while(length(priorityQueue) > 0){
         u <- getMinDistVertice(priorityQueue)
+        savedData[[u]] <- priorityQueue[[u]]
         priorityQueue[[u]] <- NULL
 
-        break
+        neighbors <- getNeighbours(graph, priorityQueue, u)
+        
+        for(neighbor in neighbors){
+            neighborData <- priorityQueue[[neighbor]]
+            # print(savedData[[u]]$dist)
+            alt <- savedData[[u]]$dist + getWeightFromName(u,neighbor,graph)    
+            if(alt < neighborData$dist){
+                priorityQueue[[neighbor]]$dist <- alt
+                priorityQueue[[neighbor]]$prev <- u
+            }
+        }
     }
+
+    outputVector <- unname(sapply(savedData, function(x) x$dist))
+    print(outputVector)
+
 # Psedo-code: 
 #   function Dijkstra(Graph, source):
 #      for each vertex v in Graph.Vertices:
@@ -75,4 +91,18 @@ getMinDistVertice <-function(priorityQueue){
         }
     }
     return(verticeName)
+}
+
+getNeighbours <-function(graph, priorityQueue, currentNode){
+    allNodesConnectedToCurrentNode <- graph[graph$v1 == currentNode,]$v2
+    allNodesInPriorityQueue <- as.numeric(names(priorityQueue))
+    # take the intersection of the two vectors to get the nodes still in the queue and is connected
+    # return as a string since we will filter on that later
+    return(as.character(intersect(allNodesConnectedToCurrentNode, allNodesInPriorityQueue)))
+}
+
+getWeightFromName <-function(current,neighbor,graph){
+    sort1 <- graph[graph$v1 == current,,]
+    sort2 <- sort1[sort1$v2 == neighbor,]
+    return(sort2$w)
 }
