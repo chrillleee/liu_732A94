@@ -1,3 +1,11 @@
+#' Add together two numbers
+#' 
+#' @param x A number.
+#' @param y A number.
+#' @returns A numeric vector.
+#' @examples
+#' add(1, 1)
+#' add(10, 1)
 dijkstra <-
 function(graph, init_node){
     expectedNames <- c("v1", "v2", "w")
