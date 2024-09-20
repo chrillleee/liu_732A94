@@ -51,12 +51,12 @@ getWinAlternatives <-function(choiseIndex){
 # Step 2. Take mean of window
 # Step 3. Append output to get the vector
 # Step 4. Add 1 to index until hit the ceiling
-my_moving_median <-function(x,n,na.rm = FALSE){
+my_moving_median <-function(x,n,...){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(n)))
     output <- c()
      for(index in (n+1):length(x)){
         window <- x[(index-n):index]
-        output = append(output,median(window,na.rm ))
+        output = append(output,median(window,... ))
      }
     return(output)
 }
@@ -134,7 +134,7 @@ repeat_find_cumsum <-function(x, find_sum){
 
 # same as my_moving_median but move the conditions from the while to the if and negate the conditions
 # had to declare the starting point to above the loop
-repeat_my_moving_median<-function(x,n, na.rm = FALSE){
+repeat_my_moving_median<-function(x,n, ...){
     stopifnot((is.numeric(x) && is.vector(x)),(is.numeric(n)))
     output <- c()
     index = n+1
@@ -142,7 +142,7 @@ repeat_my_moving_median<-function(x,n, na.rm = FALSE){
      repeat{
         if(index > stopIndex){break}
         window <- x[(index-n):index]
-        output = append(output,median(window,na.rm))
+        output = append(output,median(window,...))
         index = index + 1
      }
     return(output)
