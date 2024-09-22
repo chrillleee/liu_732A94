@@ -1,6 +1,6 @@
 context("euclidean")
 
-test_that("GDC is calculated correctly.", {
+test_that("GDC is calculated incorrectly.", {
   expect_equal(euclidean(123612, 13892347912), 4)
   expect_equal(euclidean(100, 1000), 100)
   expect_equal(euclidean(-100, 1000), 100)

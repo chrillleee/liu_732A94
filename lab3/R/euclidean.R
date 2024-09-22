@@ -16,7 +16,8 @@
 
 euclidean <- function(num1,num2){
     stopifnot(is.numeric(num1)&length(num1)==1,is.numeric(num2)&length(num2)==1)
-
+    num1 <- abs(num1)
+    num2 <- abs(num2)
     if(num1>=num2){
         a <- num1
         b <- num2
